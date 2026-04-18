@@ -5,12 +5,20 @@ Verify [SignForge](https://signforge.io)-signed documents offline. No account ne
 [![npm version](https://img.shields.io/npm/v/@signforge/verify)](https://www.npmjs.com/package/@signforge/verify)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
+## Why Independent Verification Matters
+
+Most e-signature platforms lock your proof inside their ecosystem. If the vendor disappears, your proof disappears. [SignForge](https://signforge.io) takes a different approach: every signed document contains a complete, self-verifying cryptographic proof bundle using open standards.
+
+This package lets **anyone** verify a SignForge-signed document — developers, auditors, legal teams, or even AI agents — without needing a SignForge account or any internet connection.
+
+> **"Don't trust us. Verify yourself."** — [SignForge Trust Architecture](https://signforge.io/docs/verification-architecture)
+
 ## What This Verifies
 
-Every SignForge-signed document contains a cryptographic proof bundle. This package verifies:
+Every [SignForge](https://signforge.io)-signed document contains a cryptographic proof bundle. This package verifies:
 
-- **W3C Verifiable Credential** — ECDSA P-256 DataIntegrityProof (ecdsa-jcs-2019)
-- **JAdES JWS** — EU-standard ES256 compact signature
+- **W3C Verifiable Credential** — ECDSA P-256 DataIntegrityProof ([ecdsa-jcs-2019](https://www.w3.org/TR/vc-di-ecdsa/))
+- **JAdES JWS** — EU-standard ES256 compact signature ([ETSI TS 119 182](https://www.etsi.org/deliver/etsi_ts/119100_119199/11918201/01.01.01_60/ts_11918201v010101p.pdf))
 - **Merkle transparency proof** — RFC 6962 inclusion proof against a signed tree head
 - **RFC 3161 timestamp** — DigiCert TSA timestamp presence
 - **Signer identity credentials** — per-signer W3C VCs
@@ -55,7 +63,7 @@ npx @signforge/verify document.proof.html
 # Verify a signed PDF
 npx @signforge/verify document-signed.pdf
 
-# JSON output
+# JSON output (for scripting / CI pipelines)
 npx @signforge/verify document-signed.pdf --json
 ```
 
@@ -120,7 +128,7 @@ interface CheckResult {
 
 ## How It Works
 
-SignForge embeds a W3C Verifiable Credential and supporting cryptographic proofs inside every signed document. This verifier:
+[SignForge](https://signforge.io) embeds a W3C Verifiable Credential and supporting cryptographic proofs inside every signed document. This verifier:
 
 1. Extracts the proof bundle from the document
 2. Imports the embedded ECDSA P-256 public key
@@ -131,12 +139,24 @@ SignForge embeds a W3C Verifiable Credential and supporting cryptographic proofs
 
 All verification happens locally — no network requests, no SignForge servers involved.
 
-[Verification Architecture](https://signforge.io/docs/verification-architecture) | [Proof Format Spec](https://signforge.io/docs/proof-format)
+Learn more:
+- [Verification Architecture](https://signforge.io/docs/verification-architecture) — technical deep-dive for developers
+- [Proof Format Specification v1.0](https://signforge.io/docs/proof-format) — full bundle schema reference
+- [Online Verifier](https://signforge.io/verify) — verify documents in your browser
+
+## Use Cases
+
+- **Developers** — integrate document verification into your app or CI pipeline
+- **Legal & Compliance** — independently audit e-signature validity
+- **AI Agents** — let ChatGPT or Claude verify documents via tool use
+- **Archival** — confirm document integrity years after signing, even if SignForge no longer exists
 
 ## Related
 
-- [SignForge](https://signforge.io) — Free e-signature platform
+- [SignForge](https://signforge.io) — Free e-signature platform. Sign documents in seconds.
+- [SignForge Verify (online)](https://signforge.io/verify) — Verify documents in your browser
 - [signforge-verify (Python)](https://pypi.org/project/signforge-verify/) — Python verification package
+- [Sign PDF Online Free](https://signforge.io/sign-pdf-online-free) — Sign PDFs without creating an account
 
 ## License
 
