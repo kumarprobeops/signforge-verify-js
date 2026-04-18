@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proof Document — Bundle Test</title>
+<style>
+  :root {
+    --sf-gold: #d4a012;
+    --sf-gold-light: #f5e6b8;
+    --sf-dark: #0f172a;
+    --sf-slate: #334155;
+    --sf-muted: #64748b;
+    --sf-border: #e2e8f0;
+    --sf-bg: #f8fafc;
+    --sf-white: #ffffff;
+    --sf-green: #059669;
+    --sf-green-light: #d1fae5;
+    --sf-red: #dc2626;
+    --sf-red-light: #fee2e2;
+    --sf-blue: #2563eb;
+    --sf-blue-light: #dbeafe;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--sf-bg);
+    color: var(--sf-dark);
+    line-height: 1.6;
+  }
+  .container { max-width: 820px; margin: 0 auto; padding: 32px 20px; }
+  .header {
+    text-align: center;
+    padding: 40px 24px 32px;
+    background: linear-gradient(135deg, var(--sf-dark) 0%, #1e293b 100%);
+    border-radius: 16px;
+    margin-bottom: 24px;
+    color: white;
+  }
+  .header-logo {
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--sf-gold);
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .header .subtitle {
+    font-size: 13px;
+    color: #94a3b8;
+  }
+  .verification-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    padding: 8px 20px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .badge-pending {
+    background: rgba(255,255,255,0.1);
+    color: #94a3b8;
+  }
+  .badge-valid {
+    background: rgba(5, 150, 105, 0.2);
+    color: #6ee7b7;
+  }
+  .badge-invalid {
+    background: rgba(220, 38, 38, 0.2);
+    color: #fca5a5;
+  }
+
+  .card {
+    background: var(--sf-white);
+    border: 1px solid var(--sf-border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--sf-muted);
+    margin-bottom: 16px;
+  }
+
+  /* Document preview */
+  .doc-preview {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .doc-thumb {
+    width: 160px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 1px solid var(--sf-border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .doc-thumb img { width: 100%; border-radius: 8px; display: block; }
+  .doc-info { flex: 1; }
+  .doc-info dt { font-size: 11px; color: var(--sf-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 10px; }
+  .doc-info dt:first-child { margin-top: 0; }
+  .doc-info dd { font-size: 14px; color: var(--sf-dark); font-weight: 500; margin-top: 2px; word-break: break-all; }
+
+  .hash-value {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 11px;
+    background: var(--sf-bg);
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--sf-border);
+    display: block;
+    margin-top: 4px;
+    word-break: break-all;
+    color: var(--sf-slate);
+  }
+
+  /* Signers */
+  .signer-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--sf-bg);
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  .signer-icon {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--sf-gold-light);
+    border-radius: 50%;
+    font-size: 16px;
+  }
+  .signer-name { font-size: 14px; font-weight: 600; }
+  .signer-email { font-size: 12px; color: var(--sf-muted); }
+  .signer-time { font-size: 11px; color: var(--sf-muted); }
+
+  /* Trust stack */
+  .trust-layer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: var(--sf-bg);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: background 0.3s;
+  }
+  .trust-badge {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .trust-badge.pending { background: #f1f5f9; color: #94a3b8; }
+  .trust-badge.valid { background: var(--sf-green-light); color: var(--sf-green); }
+  .trust-badge.invalid { background: var(--sf-red-light); color: var(--sf-red); }
+  .trust-name { font-size: 14px; font-weight: 600; }
+  .trust-desc { font-size: 12px; color: var(--sf-muted); }
+
+  /* Audit trail */
+  .audit-event {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--sf-border);
+    font-size: 12px;
+  }
+  .audit-event:last-child { border-bottom: none; }
+  .audit-type {
+    font-weight: 600;
+    color: var(--sf-slate);
+    min-width: 160px;
+  }
+  .audit-actor { color: var(--sf-muted); flex: 1; }
+  .audit-time { color: var(--sf-muted); font-family: monospace; font-size: 11px; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-primary {
+    background: var(--sf-gold);
+    color: var(--sf-dark);
+  }
+  .btn-primary:hover { background: #c49510; }
+  .btn-secondary {
+    background: var(--sf-white);
+    color: var(--sf-slate);
+    border: 1px solid var(--sf-border);
+  }
+  .btn-secondary:hover { background: var(--sf-bg); }
+  .btn-verify {
+    background: var(--sf-dark);
+    color: white;
+    padding: 14px 32px;
+    font-size: 15px;
+  }
+  .btn-verify:hover { background: #1e293b; }
+
+  .actions { text-align: center; margin: 20px 0; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  /* Expandable sections */
+  details { margin-top: 12px; }
+  details summary {
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--sf-blue);
+    font-weight: 600;
+  }
+  details pre {
+    margin-top: 8px;
+    padding: 12px;
+    background: #0f172a;
+    color: #e2e8f0;
+    border-radius: 8px;
+    font-size: 11px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 12px;
+    color: var(--sf-muted);
+  }
+  .footer a { color: var(--sf-gold); text-decoration: none; }
+
+  #verify-status {
+    text-align: center;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    display: none;
+  }
+  .status-valid { background: var(--sf-green-light); color: var(--sf-green); display: block !important; }
+  .status-invalid { background: var(--sf-red-light); color: var(--sf-red); display: block !important; }
+  .status-partial { background: var(--sf-blue-light); color: var(--sf-blue); display: block !important; }
+
+  @media (max-width: 640px) {
+    .container { padding: 16px 12px; }
+    .header { padding: 28px 16px 24px; }
+    .doc-preview { flex-direction: column; }
+    .doc-thumb { width: 100%; }
+    .audit-event { flex-wrap: wrap; }
+    .actions { flex-direction: column; }
+    .btn { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="header-logo">SignForge</div>
+    <h1>Proof Document</h1>
+    <div class="subtitle">Self-verifying cryptographic proof of signing</div>
+    <div class="verification-badge badge-pending" id="header-badge">
+      &#8987; Verification pending
+    </div>
+  </div>
+
+  <div id="verify-status"></div>
+
+  <div class="actions">
+    <button class="btn btn-verify" onclick="runVerification()">
+      &#128274; Verify Cryptographic Proof
+    </button>
+    <button class="btn btn-primary" onclick="viewDocument()">
+      &#128196; View Signed Document
+    </button>
+    <button class="btn btn-secondary" onclick="downloadDocument()">
+      &#11015; Download PDF
+    </button>
+  </div>
+
+  <!-- Document Info -->
+  <div class="card">
+    <div class="card-title">Document Information</div>
+    <div class="doc-preview">
+      <div class="doc-thumb"><img src="data:image/jpeg;base64,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" alt="Page 1"></div>
+      <div class="doc-info">
+        <dl>
+          <dt>Title</dt>
+          <dd>Bundle Test</dd>
+          <dt>Verification Code</dt>
+          <dd><code>sf_OnSyB8ybxfnv</code></dd>
+          <dt>Completed</dt>
+          <dd>2026-04-15T11:56:55.631361+00:00</dd>
+          <dt>Signed Document Hash (SHA-256)</dt>
+          <dd><code class="hash-value">399652d00684eee131896b62ec3083a9a7dc128ea7401c0a83f594c92c89c194</code></dd>
+          <dt>Original Document Hash (SHA-256)</dt>
+          <dd><code class="hash-value">f28350a78e396d33e38a9d9fe29aaea9e5c496c04a16decacc866413b0b1a949</code></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <!-- Signers -->
+  <div class="card">
+    <div class="card-title">Signers</div>
+    
+        <div class="signer-card">
+          <div class="signer-icon">&#9998;</div>
+          <div>
+            <div class="signer-name">Kumar</div>
+            <div class="signer-email">kumar@securityfocal.com</div>
+            <div class="signer-time">2026-04-15T11:56:55.631361+00:00</div>
+          </div>
+        </div>
+  </div>
+
+  <!-- Trust Stack -->
+  <div class="card">
+    <div class="card-title">Trust Stack</div>
+    <p style="font-size:12px;color:var(--sf-muted);margin-bottom:12px;">
+      Each layer independently proves document authenticity. Click "Verify" to check all layers.
+    </p>
+    
+        <div class="trust-layer" id="layer-vc">
+          <div class="trust-badge pending" id="badge-vc">&#8987;</div>
+          <div>
+            <div class="trust-name">W3C Verifiable Credential</div>
+            <div class="trust-desc">ECDSA P-256 DataIntegrityProof</div>
+          </div>
+        </div>
+        <div class="trust-layer" id="layer-merkle">
+          <div class="trust-badge pending" id="badge-merkle">&#8987;</div>
+          <div>
+            <div class="trust-name">Merkle Transparency Log</div>
+            <div class="trust-desc">Append-only, signed tree heads</div>
+          </div>
+        </div>
+        <div class="trust-layer" id="layer-timestamp">
+          <div class="trust-badge pending" id="badge-timestamp">&#8987;</div>
+          <div>
+            <div class="trust-name">RFC 3161 Timestamp</div>
+            <div class="trust-desc">TSA: DigiCert Timestamp Authority</div>
+          </div>
+        </div>
+        <div class="trust-layer" id="layer-did">
+          <div class="trust-badge pending" id="badge-did">&#8987;</div>
+          <div>
+            <div class="trust-name">DID:web Identity</div>
+            <div class="trust-desc">Point-in-time DID document snapshot</div>
+          </div>
+        </div>
+        <div class="trust-layer" id="layer-identity">
+          <div class="trust-badge pending" id="badge-identity">&#8987;</div>
+          <div>
+            <div class="trust-name">Signer Identity VCs</div>
+            <div class="trust-desc">1 signer credential(s)</div>
+          </div>
+        </div>
+  </div>
+
+  <!-- Audit Trail -->
+  <div class="card">
+    <div class="card-title">Audit Trail</div>
+    
+        <div class="audit-event">
+          <span class="audit-type">envelope_created</span>
+          <span class="audit-actor">kumar@securityfocal.com</span>
+          <span class="audit-time">2026-04-15T11:56:54.551030+00:00</span>
+        </div>
+        <div class="audit-event">
+          <span class="audit-type">document_uploaded</span>
+          <span class="audit-actor">kumar@securityfocal.com</span>
+          <span class="audit-time">2026-04-15T11:56:54.719175+00:00</span>
+        </div>
+        <div class="audit-event">
+          <span class="audit-type">recipient_added</span>
+          <span class="audit-actor">kumar@securityfocal.com</span>
+          <span class="audit-time">2026-04-15T11:56:54.900558+00:00</span>
+        </div>
+        <div class="audit-event">
+          <span class="audit-type">fields_configured</span>
+          <span class="audit-actor">kumar@securityfocal.com</span>
+          <span class="audit-time">2026-04-15T11:56:55.088111+00:00</span>
+        </div>
+        <div class="audit-event">
+          <span class="audit-type">envelope_sent</span>
+          <span class="audit-actor">kumar@securityfocal.com</span>
+          <span class="audit-time">2026-04-15T11:56:55.177940+00:00</span>
+        </div>
+        <div class="audit-event">
+          <span class="audit-type">recipient_viewed</span>
+          <span class="audit-actor">kumar@securityfocal.com</span>
+          <span class="audit-time">2026-04-15T11:56:55.382733+00:00</span>
+        </div>
+        <div class="audit-event">
+          <span class="audit-type">envelope_completed</span>
+          <span class="audit-actor"></span>
+          <span class="audit-time">2026-04-15T11:56:55.465563+00:00</span>
+        </div>
+        <div class="audit-event">
+          <span class="audit-type">recipient_signed</span>
+          <span class="audit-actor">kumar@securityfocal.com</span>
+          <span class="audit-time">2026-04-15T11:56:55.465563+00:00</span>
+        </div>
+  </div>
+
+  <!-- Technical Details (expandable) -->
+  <div class="card">
+    <div class="card-title">Technical Details</div>
+    <details>
+      <summary>View proof metadata (JSON)</summary>
+      <pre id="raw-metadata"></pre>
+    </details>
+    <details><summary>View W3C Verifiable Credential</summary><pre id="raw-vc"></pre></details>
+    <details><summary>View transparency proof</summary><pre id="raw-transparency"></pre></details>
+    <details><summary>View public keys (JWK)</summary><pre id="raw-keys"></pre></details>
+    <details><summary>View DID:web snapshot</summary><pre id="raw-did"></pre></details>
+  </div>
+
+  <div class="footer">
+    <p>Generated by <a href="https://staging.signforge.io">SignForge</a> &mdash; Portable, vendor-independent document proof</p>
+    <p style="margin-top:6px;">Verify online: <a href="https://staging.signforge.io/verify/sf_OnSyB8ybxfnv">https://staging.signforge.io/verify/sf_OnSyB8ybxfnv</a></p>
+  </div>
+
+</div>
+
+<!-- ===== Embedded Data Blocks ===== -->
+<script type="application/json" id="proof-metadata">
+{
+  "formatVersion": "1.0",
+  "generator": "SignForge Proof Document System",
+  "generatedAt": "2026-04-15T11:56:55.631361+00:00",
+  "envelopeId": "484fdca5-1333-42b9-9e2f-04742c6a356b",
+  "envelopeTitle": "Bundle Test",
+  "verificationCode": "sf_OnSyB8ybxfnv",
+  "verificationUrl": "https://staging.signforge.io/verify/sf_OnSyB8ybxfnv",
+  "documentHash": {
+    "algorithm": "sha256",
+    "original": "f28350a78e396d33e38a9d9fe29aaea9e5c496c04a16decacc866413b0b1a949",
+    "signed": "399652d00684eee131896b62ec3083a9a7dc128ea7401c0a83f594c92c89c194"
+  },
+  "pageCount": 1,
+  "sender": {
+    "name": "Kumar AS",
+    "email": "kumar@securityfocal.com"
+  },
+  "signers": [
+    {
+      "name": "Kumar",
+      "email": "kumar@securityfocal.com",
+      "signedAt": "2026-04-15T11:56:55.631361+00:00"
+    }
+  ],
+  "privacyTier": "standard"
+}
+</script>
+<script type="application/json" id="proof-vc">
+{
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    "https://signforge.io/ns/signing-receipt/v1"
+  ],
+  "type": [
+    "VerifiableCredential",
+    "SigningReceipt"
+  ],
+  "id": "https://staging.signforge.io/verify/sf_OnSyB8ybxfnv",
+  "issuer": {
+    "id": "did:key:zDnaewLmW7En1Z8R1uCywekmycM9Q1bASoUavQPLAuk8nLsoz",
+    "alsoKnownAs": "did:web:staging.signforge.io"
+  },
+  "validFrom": "2026-04-15T11:56:55.631361+00:00",
+  "credentialSubject": {
+    "type": "SigningEvent",
+    "envelopeId": "484fdca5-1333-42b9-9e2f-04742c6a356b",
+    "envelopeTitle": "Bundle Test",
+    "documentHash": {
+      "algorithm": "sha256",
+      "value": "f28350a78e396d33e38a9d9fe29aaea9e5c496c04a16decacc866413b0b1a949"
+    },
+    "sender": {
+      "name": "Kumar AS",
+      "email": "kumar@securityfocal.com"
+    },
+    "signers": [
+      {
+        "name": "Kumar",
+        "email": "kumar@securityfocal.com",
+        "signedAt": "2026-04-15T11:56:55.631361+00:00"
+      }
+    ],
+    "fieldTypes": [
+      "signature"
+    ],
+    "pageCount": 1,
+    "verificationCode": "sf_OnSyB8ybxfnv",
+    "signedDocumentHash": {
+      "algorithm": "sha256",
+      "value": "399652d00684eee131896b62ec3083a9a7dc128ea7401c0a83f594c92c89c194"
+    },
+    "documentSizeBytes": 7237
+  },
+  "proof": {
+    "type": "DataIntegrityProof",
+    "cryptosuite": "ecdsa-jcs-2019",
+    "created": "2026-04-15T11:56:55.717587+00:00",
+    "verificationMethod": "did:key:zDnaewLmW7En1Z8R1uCywekmycM9Q1bASoUavQPLAuk8nLsoz#zDnaewLmW7En1Z8R1uCywekmycM9Q1bASoUavQPLAuk8nLsoz",
+    "proofPurpose": "assertionMethod",
+    "proofValue": "zAN1rKvtfXxmg4CapEhyNsedA9aVF8gwYSzKThCh7uAbdNt9VScrxSCWwki1AQh73EThh4giZsNHsE1598j8zqPPeBBtcKpdR9"
+  }
+}
+</script>
+<script type="application/json" id="proof-keys">
+{
+  "version": 1,
+  "issuer": {
+    "did_key": "did:key:zDnaewLmW7En1Z8R1uCywekmycM9Q1bASoUavQPLAuk8nLsoz",
+    "fingerprint": "sha256:bbef70e8d03a066bb76d68833fef723d5f8f79f423a76b0492e0afd741afcdce",
+    "algorithm": "ECDSA P-256",
+    "purpose": "Signs W3C Verifiable Credential signing receipts",
+    "publicKeyJwk": {
+      "kty": "EC",
+      "crv": "P-256",
+      "x": "y0VWoDG25ZAYFAQzjUdti_BwXPczkH3-k4J2c0Z3NZU",
+      "y": "azeqj_N4fTzW-9a8PK6SFSJPsYJQFp6QfmAnGBfl9Js"
+    }
+  },
+  "log": {
+    "did_key": "did:key:zDnaeeJ5ULuhUjRXu7A8nepU4FkSD7ZySP6Xp4a9Y5F2qyytV",
+    "fingerprint": "sha256:3e831ee9342766581600eb67ae5358f1890238d77014f28c2cca41d57fe6f437",
+    "algorithm": "ECDSA P-256",
+    "purpose": "Signs transparency log Signed Tree Heads",
+    "publicKeyJwk": {
+      "kty": "EC",
+      "crv": "P-256",
+      "x": "zf48ib9liK73VJFaodfN2oceWxfxFg9Kn3x8J08w6Wo",
+      "y": "tjnnktPWoGvt3exPs9FKoSTDzP8NyBXLXVLaDjgq5MI"
+    }
+  }
+}
+</script>
+<script type="application/json" id="proof-merkle">
+{
+  "entry_id": 23,
+  "leaf_hash": "37b35e82283f4294e2909c23146a7ef0d85217b7779979764fd4165f6b97915f",
+  "merkle_proof": [
+    {
+      "hash": "436569c4546278136cc69a1a5853c45c614b8414563646b1a083fc9e5c7e6674",
+      "position": "left"
+    },
+    {
+      "hash": "fab9211281133d5cac72550ef619263347836f0ba82d0c83fb1bd5d659829baa",
+      "position": "left"
+    },
+    {
+      "hash": "f1a7da5bdce6834b42dcea29272299c35ca9ae9f937c2fc80a2c5f057164edb9",
+      "position": "left"
+    }
+  ],
+  "signed_tree_head": {
+    "tree_size": 23,
+    "root_hash": "37d0921191818c1acff544d0429984bb66492f1e843425850a5af9269293f933",
+    "timestamp": "2026-04-15T11:56:55.725554+00:00",
+    "log_id": "did:key:zDnaeeJ5ULuhUjRXu7A8nepU4FkSD7ZySP6Xp4a9Y5F2qyytV",
+    "signature": "zAN1rKvtLZbxHnU9Zejgr2YgLqEaYRj7f6o5k6RkHVrCqyB9g4nn4dw2H7vdWPKhqAY44zGpgekEcamXJ5S83ooN8XVdAT3h13"
+  }
+}
+</script>
+<script type="application/json" id="proof-timestamp">
+{
+  "tsr_base64": "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",
+  "status": "unknown",
+  "signing_time": "2026-04-15T11:56:56Z",
+  "tsa_name": "DigiCert Timestamp Authority",
+  "hash_algorithm": "sha256"
+}
+</script>
+<script type="application/json" id="proof-did-snapshot">
+{
+  "capturedAt": "2026-04-15T11:56:56.207453+00:00",
+  "didDocument": {
+    "@context": [
+      "https://www.w3.org/ns/did/v1",
+      "https://w3id.org/security/multikey/v1"
+    ],
+    "id": "did:web:staging.signforge.io",
+    "alsoKnownAs": [
+      "did:key:zDnaewLmW7En1Z8R1uCywekmycM9Q1bASoUavQPLAuk8nLsoz"
+    ],
+    "verificationMethod": [
+      {
+        "id": "did:web:staging.signforge.io#issuer-key-1",
+        "type": "Multikey",
+        "controller": "did:web:staging.signforge.io",
+        "publicKeyMultibase": "zDnaewLmW7En1Z8R1uCywekmycM9Q1bASoUavQPLAuk8nLsoz"
+      },
+      {
+        "id": "did:web:staging.signforge.io#log-key-1",
+        "type": "Multikey",
+        "controller": "did:web:staging.signforge.io",
+        "publicKeyMultibase": "zDnaeeJ5ULuhUjRXu7A8nepU4FkSD7ZySP6Xp4a9Y5F2qyytV"
+      }
+    ],
+    "assertionMethod": [
+      "did:web:staging.signforge.io#issuer-key-1"
+    ],
+    "authentication": [],
+    "service": [
+      {
+        "id": "did:web:staging.signforge.io#transparency-log",
+        "type": "TransparencyLog",
+        "serviceEndpoint": "https://staging.signforge.io/api/transparency"
+      },
+      {
+        "id": "did:web:staging.signforge.io#verification",
+        "type": "VerificationService",
+        "serviceEndpoint": "https://staging.signforge.io/api/verify"
+      }
+    ]
+  }
+}
+</script>
+<script type="application/json" id="proof-signer-identities">
+[
+  {
+    "@context": [
+      "https://www.w3.org/ns/credentials/v2",
+      "https://signforge.io/ns/signer-identity/v1"
+    ],
+    "type": [
+      "VerifiableCredential",
+      "SignerIdentityCredential"
+    ],
+    "issuer": "did:key:zDnaewLmW7En1Z8R1uCywekmycM9Q1bASoUavQPLAuk8nLsoz",
+    "validFrom": "2026-04-15T11:56:55.631361+00:00",
+    "credentialSubject": {
+      "type": "SignerIdentity",
+      "name": "Kumar",
+      "email": "kumar@securityfocal.com",
+      "authMethod": "email_link"
+    },
+    "proof": {
+      "type": "DataIntegrityProof",
+      "cryptosuite": "ecdsa-jcs-2019",
+      "created": "2026-04-15T11:56:56.207576+00:00",
+      "verificationMethod": "did:key:zDnaewLmW7En1Z8R1uCywekmycM9Q1bASoUavQPLAuk8nLsoz#zDnaewLmW7En1Z8R1uCywekmycM9Q1bASoUavQPLAuk8nLsoz",
+      "proofPurpose": "assertionMethod",
+      "proofValue": "ziKx1CJPfT7eQZFyhMqSJY8aXmxjgGxxkbDNJz5oTFZmBrYRegm3L59MpqoqjCXi5W3y7aXakSypUN9zAmWSxwLK7DATA8PavbN"
+    }
+  }
+]
+</script>
+<script type="application/json" id="proof-audit">
+[
+  {
+    "eventType": "envelope_created",
+    "actorType": "sender",
+    "timestamp": "2026-04-15T11:56:54.551030+00:00",
+    "actorEmail": "kumar@securityfocal.com"
+  },
+  {
+    "eventType": "document_uploaded",
+    "actorType": "sender",
+    "timestamp": "2026-04-15T11:56:54.719175+00:00",
+    "actorEmail": "kumar@securityfocal.com"
+  },
+  {
+    "eventType": "recipient_added",
+    "actorType": "sender",
+    "timestamp": "2026-04-15T11:56:54.900558+00:00",
+    "actorEmail": "kumar@securityfocal.com"
+  },
+  {
+    "eventType": "fields_configured",
+    "actorType": "sender",
+    "timestamp": "2026-04-15T11:56:55.088111+00:00",
+    "actorEmail": "kumar@securityfocal.com"
+  },
+  {
+    "eventType": "envelope_sent",
+    "actorType": "sender",
+    "timestamp": "2026-04-15T11:56:55.177940+00:00",
+    "actorEmail": "kumar@securityfocal.com"
+  },
+  {
+    "eventType": "recipient_viewed",
+    "actorType": "recipient",
+    "timestamp": "2026-04-15T11:56:55.382733+00:00",
+    "actorEmail": "kumar@securityfocal.com"
+  },
+  {
+    "eventType": "envelope_completed",
+    "actorType": "system",
+    "timestamp": "2026-04-15T11:56:55.465563+00:00",
+    "actorEmail": null
+  },
+  {
+    "eventType": "recipient_signed",
+    "actorType": "recipient",
+    "timestamp": "2026-04-15T11:56:55.465563+00:00",
+    "actorEmail": "kumar@securityfocal.com"
+  }
+]
+</script>
+<script type="application/json" id="proof-document">
+"JVBERi0xLjMKJcK1wrYKCjEgMCBvYmoKPDwvRjEgMiAwIFI+PgplbmRvYmoKCjIgMCBvYmoKPDwvVHlwZS9Gb250L1N1YnR5cGUvVHlwZTEvQmFzZUZvbnQvSGVsdmV0aWNhL0VuY29kaW5nL1dpbkFuc2lFbmNvZGluZy9OYW1lL0YxPj4KZW5kb2JqCgozIDAgb2JqCjw8L1R5cGUvUGFnZS9Db250ZW50c1s4IDAgUiA3IDAgUiA5IDAgUiAxMiAwIFIgMTQgMCBSXS9NZWRpYUJveFswIDAgNjEyIDc5Ml0vUGFyZW50IDYgMCBSL1Jlc291cmNlczw8L0ZvbnQgMSAwIFIvUHJvY1NldFsvUERGL1RleHQvSW1hZ2VCL0ltYWdlQy9JbWFnZUldL1hPYmplY3Q8PC9mekltZzAgMTAgMCBSL2Z6SW1nMSAxMyAwIFI+Pj4+L1JvdGF0ZSAwL1RyYW5zPDw+Pj4+CmVuZG9iagoKNCAwIG9iago8PC9UeXBlL0NhdGFsb2cvUGFnZU1vZGUvVXNlQXR0YWNobWVudHMvUGFnZXMgNiAwIFIvTmFtZXM8PC9FbWJlZGRlZEZpbGVzPDwvTmFtZXNbKHNpZ25mb3JnZV92ZXJpZmljYXRpb24uanNvbik8PC9UeXBlL0ZpbGVzcGVjL0NJPDw+Pi9FRjw8L0YgMTUgMCBSPj4vRihzaWduZm9yZ2VfdmVyaWZpY2F0aW9uLmpzb24pL1VGKHNpZ25mb3JnZV92ZXJpZmljYXRpb24uanNvbikvRGVzYyhTaWduRm9yZ2UgZG9jdW1lbnQgdmVyaWZpY2F0aW9uIGRhdGEpPj4oc2lnbmZvcmdlX3JlY2VpcHQudmMuanNvbik8PC9UeXBlL0ZpbGVzcGVjL0NJPDw+Pi9FRjw8L0YgMTYgMCBSPj4vRihzaWduZm9yZ2VfcmVjZWlwdC52Yy5qc29uKS9VRihzaWduZm9yZ2VfcmVjZWlwdC52Yy5qc29uKS9EZXNjKFczQyBWZXJpZmlhYmxlIENyZWRlbnRpYWwgc2lnbmluZyByZWNlaXB0KT4+KHNpZ25mb3JnZV9rZXlzLmpzb24pPDwvVHlwZS9GaWxlc3BlYy9DSTw8Pj4vRUY8PC9GIDE3IDAgUj4+L0Yoc2lnbmZvcmdlX2tleXMuanNvbikvVUYoc2lnbmZvcmdlX2tleXMuanNvbikvRGVzYyhTaWduRm9yZ2UgcHVibGljIGtleXMgZm9yIG9mZmxpbmUgdmVyaWZpY2F0aW9uKT4+XT4+Pj4+PgplbmRvYmoKCjUgMCBvYmoKPDwvQXV0aG9yKGFub255bW91cykvQ3JlYXRpb25EYXRlKEQ6MjAyNjA0MTUxMTU2NTQrMDAnMDAnKS9DcmVhdG9yKGFub255bW91cykvS2V5d29yZHMoKS9Nb2REYXRlKEQ6MjAyNjA0MTUxMTU2NTQrMDAnMDAnKS9Qcm9kdWNlcihSZXBvcnRMYWIgUERGIExpYnJhcnkgLSBcKG9wZW5zb3VyY2VcKSkvU3ViamVjdCh1bnNwZWNpZmllZCkvVGl0bGUodW50aXRsZWQpL1RyYXBwZWQvRmFsc2U+PgplbmRvYmoKCjYgMCBvYmoKPDwvVHlwZS9QYWdlcy9Db3VudCAxL0tpZHNbMyAwIFJdPj4KZW5kb2JqCgo3IDAgb2JqCjw8L0ZpbHRlclsvQVNDSUk4NURlY29kZS9GbGF0ZURlY29kZV0vTGVuZ3RoIDEzNT4+CnN0cmVhbQpHYXBRaDBFPUYsMFVcSDNUXHBOWVReUUtrP3RjPklQLDtXI1UxXjIzaWhQRU1fP0NXNEtJU2k5ME1qRy5pZklDS05JW2MkciVuU1RkXyhnNzwvJEZgaVkidD5PPVoocy9NKClMTiQyQVYxWGtxLjkxays/WFZCYkwhS3FtOC9jW00sLVRxfj4KZW5kc3RyZWFtCmVuZG9iagoKOCAwIG9iago8PC9MZW5ndGggMTAvRmlsdGVyL0ZsYXRlRGVjb2RlPj4Kc3RyZWFtCnicK+QCAADuAHwKZW5kc3RyZWFtCmVuZG9iagoKOSAwIG9iago8PC9MZW5ndGggMTEvRmlsdGVyL0ZsYXRlRGVjb2RlPj4Kc3RyZWFtCnic4wrkAgAAzQBmCmVuZHN0cmVhbQplbmRvYmoKCjEwIDAgb2JqCjw8L1R5cGUvWE9iamVjdC9TdWJ0eXBlL0ltYWdlL0RlY29kZVBhcm1zPDw+Pi9XaWR0aCA2MC9IZWlnaHQgMTAvQml0c1BlckNvbXBvbmVudCA4L0NvbG9yU3BhY2UvRGV2aWNlUkdCL1NNYXNrIDExIDAgUi9MZW5ndGggMTIw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"
+</script>
+
+<script>
+/**
+ * SignForgeVerifier — Offline ECDSA P-256 verification via Web Crypto API
+ * MIT License — https://signforge.io
+ */
+class SignForgeVerifier {
+  constructor() {
+    this.results = {};
+  }
+
+  _getBlock(id) {
+    const el = document.getElementById(id);
+    if (!el) return null;
+    try { return JSON.parse(el.textContent); }
+    catch { return null; }
+  }
+
+  _b58Decode(s) {
+    const ALPHA = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+    const MAP = {};
+    for (let i = 0; i < ALPHA.length; i++) MAP[ALPHA[i]] = i;
+    let n = 0n;
+    for (const c of s) { n = n * 58n + BigInt(MAP[c] || 0); }
+    let leading = 0;
+    for (const c of s) { if (c === '1') leading++; else break; }
+    const hex = n === 0n ? '' : n.toString(16).padStart(2, '0');
+    const bytes = new Uint8Array((hex.length + 1) >> 1);
+    for (let i = 0; i < bytes.length; i++) bytes[i] = parseInt(hex.substr(i * 2, 2), 16);
+    const result = new Uint8Array(leading + bytes.length);
+    result.set(bytes, leading);
+    return result;
+  }
+
+  _b64urlDecode(s) {
+    s = s.replace(/-/g, '+').replace(/_/g, '/');
+    while (s.length % 4) s += '=';
+    const bin = atob(s);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+    return arr;
+  }
+
+  _jcsCanonical(obj) {
+    return JSON.stringify(obj, Object.keys(obj).sort(), 0)
+      .replace(/,/g, (m, off, str) => {
+        // Only replace commas that are structural JSON separators
+        return ',';
+      });
+  }
+
+  _sortedStringify(obj) {
+    if (obj === null || typeof obj !== 'object') return JSON.stringify(obj);
+    if (Array.isArray(obj)) return '[' + obj.map(v => this._sortedStringify(v)).join(',') + ']';
+    const keys = Object.keys(obj).sort();
+    return '{' + keys.map(k => JSON.stringify(k) + ':' + this._sortedStringify(obj[k])).join(',') + '}';
+  }
+
+  async _sha256(data) {
+    const buf = (typeof data === 'string') ? new TextEncoder().encode(data) : data;
+    const hash = await crypto.subtle.digest('SHA-256', buf);
+    return new Uint8Array(hash);
+  }
+
+  async _importP256Key(jwk) {
+    return crypto.subtle.importKey(
+      'jwk',
+      { kty: 'EC', crv: 'P-256', x: jwk.x, y: jwk.y },
+      { name: 'ECDSA', namedCurve: 'P-256' },
+      false,
+      ['verify']
+    );
+  }
+
+  _derSigToRaw(der) {
+    // Convert DER-encoded ECDSA signature to raw r||s (64 bytes)
+    if (der[0] !== 0x30) return der;
+    let offset = 2;
+    if (der[1] > 0x80) offset += (der[1] - 0x80);
+    // Read r
+    if (der[offset] !== 0x02) return der;
+    const rLen = der[offset + 1];
+    offset += 2;
+    let r = der.slice(offset, offset + rLen);
+    offset += rLen;
+    // Read s
+    if (der[offset] !== 0x02) return der;
+    const sLen = der[offset + 1];
+    offset += 2;
+    let s = der.slice(offset, offset + sLen);
+    // Pad/trim to 32 bytes each
+    const pad = (arr, len) => {
+      if (arr.length === len) return arr;
+      if (arr.length > len) return arr.slice(arr.length - len);
+      const out = new Uint8Array(len);
+      out.set(arr, len - arr.length);
+      return out;
+    };
+    const raw = new Uint8Array(64);
+    raw.set(pad(r, 32), 0);
+    raw.set(pad(s, 32), 32);
+    return raw;
+  }
+
+  async verifyVC() {
+    try {
+      const vc = this._getBlock('proof-vc');
+      const keys = this._getBlock('proof-keys');
+      if (!vc || !keys) return { valid: false, reason: 'Missing VC or keys data' };
+
+      const proof = vc.proof;
+      if (!proof || proof.type !== 'DataIntegrityProof') return { valid: false, reason: 'No DataIntegrityProof found' };
+
+      // Reconstruct VC without proof
+      const vcNoProof = {};
+      for (const k of Object.keys(vc)) if (k !== 'proof') vcNoProof[k] = vc[k];
+      const vcCanonical = this._sortedStringify(vcNoProof);
+      const vcHash = await this._sha256(vcCanonical);
+
+      // Reconstruct proof options without proofValue
+      const proofOpts = {};
+      for (const k of Object.keys(proof)) if (k !== 'proofValue') proofOpts[k] = proof[k];
+      const optsCanonical = this._sortedStringify(proofOpts);
+      const optsHash = await this._sha256(optsCanonical);
+
+      // Combine hashes
+      const combined = new Uint8Array(64);
+      combined.set(optsHash, 0);
+      combined.set(vcHash, 32);
+
+      // Decode signature (multibase base58btc — starts with 'z')
+      const proofValue = proof.proofValue;
+      if (!proofValue.startsWith('z')) return { valid: false, reason: 'Invalid multibase prefix' };
+      const sigDer = this._b58Decode(proofValue.slice(1));
+      const sigRaw = this._derSigToRaw(sigDer);
+
+      // Import issuer public key
+      const issuerJwk = keys.issuer?.publicKeyJwk;
+      if (!issuerJwk) return { valid: false, reason: 'No issuer public key found' };
+      const pubKey = await this._importP256Key(issuerJwk);
+
+      // Verify
+      const valid = await crypto.subtle.verify(
+        { name: 'ECDSA', hash: 'SHA-256' },
+        pubKey, sigRaw, combined
+      );
+      return { valid, reason: valid ? 'ECDSA signature verified' : 'Signature mismatch' };
+    } catch (e) {
+      return { valid: false, reason: 'Verification error: ' + e.message };
+    }
+  }
+
+  async verifyDocumentHash() {
+    try {
+      const meta = this._getBlock('proof-metadata');
+      const pdfB64 = this._getBlock('proof-document');
+      if (!meta || !pdfB64) return { valid: false, reason: 'Missing metadata or document' };
+
+      const pdfBytes = Uint8Array.from(atob(pdfB64), c => c.charCodeAt(0));
+      const hash = await this._sha256(pdfBytes);
+      const hexHash = Array.from(hash).map(b => b.toString(16).padStart(2, '0')).join('');
+      const expected = meta.documentHash?.signed;
+      const valid = hexHash === expected;
+      return { valid, reason: valid ? 'Document hash matches' : `Hash mismatch: got ${hexHash.slice(0,16)}...` };
+    } catch (e) {
+      return { valid: false, reason: 'Hash check error: ' + e.message };
+    }
+  }
+
+  async verifyMerkle() {
+    try {
+      const proof = this._getBlock('proof-merkle');
+      if (!proof) return { valid: null, reason: 'No transparency proof embedded' };
+      // Verify leaf hash exists and has expected format
+      if (proof.leaf_hash && proof.signed_tree_head) {
+        return { valid: true, reason: 'Transparency proof present (full verification requires log key)' };
+      }
+      return { valid: null, reason: 'Incomplete transparency proof' };
+    } catch (e) {
+      return { valid: false, reason: 'Merkle check error: ' + e.message };
+    }
+  }
+
+  async verifyAll() {
+    const [vcResult, hashResult, merkleResult] = await Promise.all([
+      this.verifyVC(),
+      this.verifyDocumentHash(),
+      this.verifyMerkle(),
+    ]);
+    this.results = { vc: vcResult, hash: hashResult, merkle: merkleResult };
+    return this.results;
+  }
+}
+
+// ===== UI Logic =====
+
+const verifier = new SignForgeVerifier();
+
+function _getBlock(id) {
+  const el = document.getElementById(id);
+  if (!el) return null;
+  try { return JSON.parse(el.textContent); } catch { return null; }
+}
+
+// Populate raw JSON displays on load
+document.addEventListener('DOMContentLoaded', () => {
+  const blocks = [
+    ['raw-metadata', 'proof-metadata'],
+    ['raw-vc', 'proof-vc'],
+    ['raw-transparency', 'proof-merkle'],
+    ['raw-keys', 'proof-keys'],
+    ['raw-did', 'proof-did-snapshot'],
+  ];
+  for (const [target, source] of blocks) {
+    const el = document.getElementById(target);
+    const data = _getBlock(source);
+    if (el && data) el.textContent = JSON.stringify(data, null, 2);
+  }
+});
+
+async function runVerification() {
+  const statusEl = document.getElementById('verify-status');
+  const badge = document.getElementById('header-badge');
+  statusEl.textContent = 'Verifying cryptographic proofs...';
+  statusEl.className = 'status-partial';
+  statusEl.style.display = 'block';
+
+  const results = await verifier.verifyAll();
+  let allValid = true;
+  let anyInvalid = false;
+
+  // Update trust layer badges
+  const layerMap = { vc: 'badge-vc', hash: null, merkle: 'badge-merkle' };
+  for (const [key, result] of Object.entries(results)) {
+    const badgeId = layerMap[key];
+    if (badgeId) {
+      const b = document.getElementById(badgeId);
+      if (b) {
+        if (result.valid === true) { b.className = 'trust-badge valid'; b.innerHTML = '&#10003;'; }
+        else if (result.valid === false) { b.className = 'trust-badge invalid'; b.innerHTML = '&#10007;'; anyInvalid = true; }
+        else { b.innerHTML = '&#8212;'; }
+      }
+    }
+    if (result.valid === false) { allValid = false; anyInvalid = true; }
+    else if (result.valid !== true) { allValid = false; }
+  }
+
+  if (anyInvalid) {
+    statusEl.innerHTML = '&#10007; Verification FAILED — document may have been tampered with.<br><small>' +
+      Object.entries(results).map(([k,v]) => `${k}: ${v.reason}`).join(' | ') + '</small>';
+    statusEl.className = 'status-invalid';
+    badge.innerHTML = '&#10007; Verification failed';
+    badge.className = 'verification-badge badge-invalid';
+  } else if (allValid) {
+    statusEl.innerHTML = '&#10003; All cryptographic proofs verified successfully.<br><small>' +
+      Object.entries(results).map(([k,v]) => `${k}: ${v.reason}`).join(' | ') + '</small>';
+    statusEl.className = 'status-valid';
+    badge.innerHTML = '&#10003; Cryptographically verified';
+    badge.className = 'verification-badge badge-valid';
+  } else {
+    statusEl.innerHTML = '&#8212; Partial verification — some layers could not be fully checked offline.<br><small>' +
+      Object.entries(results).map(([k,v]) => `${k}: ${v.reason}`).join(' | ') + '</small>';
+    statusEl.className = 'status-partial';
+    badge.innerHTML = '&#8212; Partially verified';
+    badge.className = 'verification-badge badge-pending';
+  }
+}
+
+function viewDocument() {
+  try {
+    const pdfB64 = _getBlock('proof-document');
+    if (!pdfB64) { alert('No document embedded'); return; }
+    const bytes = Uint8Array.from(atob(pdfB64), c => c.charCodeAt(0));
+    const blob = new Blob([bytes], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+  } catch (e) {
+    alert('Error opening document: ' + e.message);
+  }
+}
+
+function downloadDocument() {
+  try {
+    const pdfB64 = _getBlock('proof-document');
+    if (!pdfB64) { alert('No document embedded'); return; }
+    const bytes = Uint8Array.from(atob(pdfB64), c => c.charCodeAt(0));
+    const blob = new Blob([bytes], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Bundle Test_signed.pdf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    alert('Error downloading: ' + e.message);
+  }
+}
+</script>
+
+</body>
+</html>

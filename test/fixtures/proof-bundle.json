@@ -1,0 +1,217 @@
+{
+  "formatVersion": "1.0",
+  "type": "SignForgeProofBundle",
+  "verification": {
+    "signforge_version": "1.0",
+    "verification_code": "sf_OnSyB8ybxfnv",
+    "verification_url": "https://staging.signforge.io/verify/sf_OnSyB8ybxfnv",
+    "envelope_id": "484fdca5-1333-42b9-9e2f-04742c6a356b",
+    "envelope_title": "Bundle Test",
+    "sender": {
+      "name": "Kumar AS",
+      "email": "kumar@securityfocal.com"
+    },
+    "signers": [
+      {
+        "name": "Kumar",
+        "email": "kumar@securityfocal.com",
+        "signed_at": "2026-04-15T11:56:55.631361+00:00"
+      }
+    ],
+    "signer": {
+      "name": "Kumar",
+      "email": "kumar@securityfocal.com"
+    },
+    "signed_at": "2026-04-15T11:56:55.631361+00:00",
+    "original_sha256": "f28350a78e396d33e38a9d9fe29aaea9e5c496c04a16decacc866413b0b1a949",
+    "field_types": [
+      "signature"
+    ],
+    "signature": "3046022100b95384aa821f7c430ddd01f3b81cd6bb2e9581abe41555328b22639a5f20758302210098d543ed6f5e724912d2af12593b8d67830e31a25e16eabed7dcc96b95e97ac2"
+  },
+  "vc": {
+    "@context": [
+      "https://www.w3.org/ns/credentials/v2",
+      "https://signforge.io/ns/signing-receipt/v1"
+    ],
+    "type": [
+      "VerifiableCredential",
+      "SigningReceipt"
+    ],
+    "id": "https://staging.signforge.io/verify/sf_OnSyB8ybxfnv",
+    "issuer": {
+      "id": "did:key:zDnaewLmW7En1Z8R1uCywekmycM9Q1bASoUavQPLAuk8nLsoz",
+      "alsoKnownAs": "did:web:staging.signforge.io"
+    },
+    "validFrom": "2026-04-15T11:56:55.631361+00:00",
+    "credentialSubject": {
+      "type": "SigningEvent",
+      "envelopeId": "484fdca5-1333-42b9-9e2f-04742c6a356b",
+      "envelopeTitle": "Bundle Test",
+      "documentHash": {
+        "algorithm": "sha256",
+        "value": "f28350a78e396d33e38a9d9fe29aaea9e5c496c04a16decacc866413b0b1a949"
+      },
+      "sender": {
+        "name": "Kumar AS",
+        "email": "kumar@securityfocal.com"
+      },
+      "signers": [
+        {
+          "name": "Kumar",
+          "email": "kumar@securityfocal.com",
+          "signedAt": "2026-04-15T11:56:55.631361+00:00"
+        }
+      ],
+      "fieldTypes": [
+        "signature"
+      ],
+      "pageCount": 1,
+      "verificationCode": "sf_OnSyB8ybxfnv",
+      "signedDocumentHash": {
+        "algorithm": "sha256",
+        "value": "399652d00684eee131896b62ec3083a9a7dc128ea7401c0a83f594c92c89c194"
+      },
+      "documentSizeBytes": 7237
+    },
+    "proof": {
+      "type": "DataIntegrityProof",
+      "cryptosuite": "ecdsa-jcs-2019",
+      "created": "2026-04-15T11:56:55.717587+00:00",
+      "verificationMethod": "did:key:zDnaewLmW7En1Z8R1uCywekmycM9Q1bASoUavQPLAuk8nLsoz#zDnaewLmW7En1Z8R1uCywekmycM9Q1bASoUavQPLAuk8nLsoz",
+      "proofPurpose": "assertionMethod",
+      "proofValue": "zAN1rKvtfXxmg4CapEhyNsedA9aVF8gwYSzKThCh7uAbdNt9VScrxSCWwki1AQh73EThh4giZsNHsE1598j8zqPPeBBtcKpdR9"
+    }
+  },
+  "jades": "eyJhbGciOiJFUzI1NiIsImtpZCI6ImRpZDprZXk6ekRuYWV3TG1XN0VuMVo4UjF1Q3l3ZWtteWNNOVExYkFTb1VhdlFQTEF1azhuTHNveiN6RG5hZXdMbVc3RW4xWjhSMXVDeXdla215Y005UTFiQVNvVWF2UVBMQXVrOG5Mc296IiwiY3R5IjoiYXBwbGljYXRpb24vdmMrbGQranNvbiIsInNpZ1QiOiIyMDI2LTA0LTE1VDExOjU2OjU2LjI0MDU3NSswMDowMCIsIng1dCNTMjU2IjoiRGlnaUNlcnQtUkZDMzE2MSJ9.eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvbnMvY3JlZGVudGlhbHMvdjIiLCJodHRwczovL3NpZ25mb3JnZS5pby9ucy9zaWduaW5nLXJlY2VpcHQvdjEiXSwiY3JlZGVudGlhbFN1YmplY3QiOnsiZG9jdW1lbnRIYXNoIjp7ImFsZ29yaXRobSI6InNoYTI1NiIsInZhbHVlIjoiZjI4MzUwYTc4ZTM5NmQzM2UzOGE5ZDlmZTI5YWFlYTllNWM0OTZjMDRhMTZkZWNhY2M4NjY0MTNiMGIxYTk0OSJ9LCJkb2N1bWVudFNpemVCeXRlcyI6NzIzNywiZW52ZWxvcGVJZCI6IjQ4NGZkY2E1LTEzMzMtNDJiOS05ZTJmLTA0NzQyYzZhMzU2YiIsImVudmVsb3BlVGl0bGUiOiJCdW5kbGUgVGVzdCIsImZpZWxkVHlwZXMiOlsic2lnbmF0dXJlIl0sInBhZ2VDb3VudCI6MSwic2VuZGVyIjp7ImVtYWlsIjoia3VtYXJAc2VjdXJpdHlmb2NhbC5jb20iLCJuYW1lIjoiS3VtYXIgQVMifSwic2lnbmVkRG9jdW1lbnRIYXNoIjp7ImFsZ29yaXRobSI6InNoYTI1NiIsInZhbHVlIjoiMzk5NjUyZDAwNjg0ZWVlMTMxODk2YjYyZWMzMDgzYTlhN2RjMTI4ZWE3NDAxYzBhODNmNTk0YzkyYzg5YzE5NCJ9LCJzaWduZXJzIjpbeyJlbWFpbCI6Imt1bWFyQHNlY3VyaXR5Zm9jYWwuY29tIiwibmFtZSI6Ikt1bWFyIiwic2lnbmVkQXQiOiIyMDI2LTA0LTE1VDExOjU2OjU1LjYzMTM2MSswMDowMCJ9XSwidHlwZSI6IlNpZ25pbmdFdmVudCIsInZlcmlmaWNhdGlvbkNvZGUiOiJzZl9PblN5Qjh5YnhmbnYifSwiaWQiOiJodHRwczovL3N0YWdpbmcuc2lnbmZvcmdlLmlvL3ZlcmlmeS9zZl9PblN5Qjh5YnhmbnYiLCJpc3N1ZXIiOnsiYWxzb0tub3duQXMiOiJkaWQ6d2ViOnN0YWdpbmcuc2lnbmZvcmdlLmlvIiwiaWQiOiJkaWQ6a2V5OnpEbmFld0xtVzdFbjFaOFIxdUN5d2VrbXljTTlRMWJBU29VYXZRUExBdWs4bkxzb3oifSwidHlwZSI6WyJWZXJpZmlhYmxlQ3JlZGVudGlhbCIsIlNpZ25pbmdSZWNlaXB0Il0sInZhbGlkRnJvbSI6IjIwMjYtMDQtMTVUMTE6NTY6NTUuNjMxMzYxKzAwOjAwIn0.giI7eGtAl5-OZt_utuzfUnAcjLhe4yCJNaZOWVOHvpBTEXsRnM518DYyAGLqchl-5p2PZRxhOn09RGwYkPmkGQ",
+  "keys": {
+    "version": 1,
+    "issuer": {
+      "did_key": "did:key:zDnaewLmW7En1Z8R1uCywekmycM9Q1bASoUavQPLAuk8nLsoz",
+      "fingerprint": "sha256:bbef70e8d03a066bb76d68833fef723d5f8f79f423a76b0492e0afd741afcdce",
+      "algorithm": "ECDSA P-256",
+      "purpose": "Signs W3C Verifiable Credential signing receipts",
+      "publicKeyJwk": {
+        "kty": "EC",
+        "crv": "P-256",
+        "x": "y0VWoDG25ZAYFAQzjUdti_BwXPczkH3-k4J2c0Z3NZU",
+        "y": "azeqj_N4fTzW-9a8PK6SFSJPsYJQFp6QfmAnGBfl9Js"
+      }
+    },
+    "log": {
+      "did_key": "did:key:zDnaeeJ5ULuhUjRXu7A8nepU4FkSD7ZySP6Xp4a9Y5F2qyytV",
+      "fingerprint": "sha256:3e831ee9342766581600eb67ae5358f1890238d77014f28c2cca41d57fe6f437",
+      "algorithm": "ECDSA P-256",
+      "purpose": "Signs transparency log Signed Tree Heads",
+      "publicKeyJwk": {
+        "kty": "EC",
+        "crv": "P-256",
+        "x": "zf48ib9liK73VJFaodfN2oceWxfxFg9Kn3x8J08w6Wo",
+        "y": "tjnnktPWoGvt3exPs9FKoSTDzP8NyBXLXVLaDjgq5MI"
+      }
+    }
+  },
+  "transparency": {
+    "entry_id": 23,
+    "leaf_hash": "37b35e82283f4294e2909c23146a7ef0d85217b7779979764fd4165f6b97915f",
+    "merkle_proof": [
+      {
+        "hash": "436569c4546278136cc69a1a5853c45c614b8414563646b1a083fc9e5c7e6674",
+        "position": "left"
+      },
+      {
+        "hash": "fab9211281133d5cac72550ef619263347836f0ba82d0c83fb1bd5d659829baa",
+        "position": "left"
+      },
+      {
+        "hash": "f1a7da5bdce6834b42dcea29272299c35ca9ae9f937c2fc80a2c5f057164edb9",
+        "position": "left"
+      }
+    ],
+    "signed_tree_head": {
+      "tree_size": 23,
+      "root_hash": "37d0921191818c1acff544d0429984bb66492f1e843425850a5af9269293f933",
+      "timestamp": "2026-04-15T11:56:55.725554+00:00",
+      "log_id": "did:key:zDnaeeJ5ULuhUjRXu7A8nepU4FkSD7ZySP6Xp4a9Y5F2qyytV",
+      "signature": "zAN1rKvtLZbxHnU9Zejgr2YgLqEaYRj7f6o5k6RkHVrCqyB9g4nn4dw2H7vdWPKhqAY44zGpgekEcamXJ5S83ooN8XVdAT3h13"
+    }
+  },
+  "timestamp": {
+    "tsa": "DigiCert",
+    "tsaUrl": "http://timestamp.digicert.com",
+    "signingTime": "2026-04-15T11:56:56Z",
+    "hashAlgorithm": "sha256",
+    "token": "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"
+  },
+  "didSnapshot": {
+    "capturedAt": "2026-04-15T11:56:56.207453+00:00",
+    "didDocument": {
+      "@context": [
+        "https://www.w3.org/ns/did/v1",
+        "https://w3id.org/security/multikey/v1"
+      ],
+      "id": "did:web:staging.signforge.io",
+      "alsoKnownAs": [
+        "did:key:zDnaewLmW7En1Z8R1uCywekmycM9Q1bASoUavQPLAuk8nLsoz"
+      ],
+      "verificationMethod": [
+        {
+          "id": "did:web:staging.signforge.io#issuer-key-1",
+          "type": "Multikey",
+          "controller": "did:web:staging.signforge.io",
+          "publicKeyMultibase": "zDnaewLmW7En1Z8R1uCywekmycM9Q1bASoUavQPLAuk8nLsoz"
+        },
+        {
+          "id": "did:web:staging.signforge.io#log-key-1",
+          "type": "Multikey",
+          "controller": "did:web:staging.signforge.io",
+          "publicKeyMultibase": "zDnaeeJ5ULuhUjRXu7A8nepU4FkSD7ZySP6Xp4a9Y5F2qyytV"
+        }
+      ],
+      "assertionMethod": [
+        "did:web:staging.signforge.io#issuer-key-1"
+      ],
+      "authentication": [],
+      "service": [
+        {
+          "id": "did:web:staging.signforge.io#transparency-log",
+          "type": "TransparencyLog",
+          "serviceEndpoint": "https://staging.signforge.io/api/transparency"
+        },
+        {
+          "id": "did:web:staging.signforge.io#verification",
+          "type": "VerificationService",
+          "serviceEndpoint": "https://staging.signforge.io/api/verify"
+        }
+      ]
+    }
+  },
+  "signerIdentities": [
+    {
+      "@context": [
+        "https://www.w3.org/ns/credentials/v2",
+        "https://signforge.io/ns/signer-identity/v1"
+      ],
+      "type": [
+        "VerifiableCredential",
+        "SignerIdentityCredential"
+      ],
+      "issuer": "did:key:zDnaewLmW7En1Z8R1uCywekmycM9Q1bASoUavQPLAuk8nLsoz",
+      "validFrom": "2026-04-15T11:56:55.631361+00:00",
+      "credentialSubject": {
+        "type": "SignerIdentity",
+        "name": "Kumar",
+        "email": "kumar@securityfocal.com",
+        "authMethod": "email_link"
+      },
+      "proof": {
+        "type": "DataIntegrityProof",
+        "cryptosuite": "ecdsa-jcs-2019",
+        "created": "2026-04-15T11:56:56.207576+00:00",
+        "verificationMethod": "did:key:zDnaewLmW7En1Z8R1uCywekmycM9Q1bASoUavQPLAuk8nLsoz#zDnaewLmW7En1Z8R1uCywekmycM9Q1bASoUavQPLAuk8nLsoz",
+        "proofPurpose": "assertionMethod",
+        "proofValue": "ziKx1CJPfT7eQZFyhMqSJY8aXmxjgGxxkbDNJz5oTFZmBrYRegm3L59MpqoqjCXi5W3y7aXakSypUN9zAmWSxwLK7DATA8PavbN"
+      }
+    }
+  ]
+}

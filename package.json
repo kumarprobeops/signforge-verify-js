@@ -1,0 +1,52 @@
+{
+  "name": "@signforge/verify",
+  "version": "1.0.0",
+  "description": "Verify SignForge-signed PDFs and proof documents offline — W3C VC, ECDSA P-256, Merkle proofs, JAdES JWS",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "signforge-verify": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "node test/verify.test.js",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "signforge",
+    "verify",
+    "e-signature",
+    "verifiable-credentials",
+    "w3c-vc",
+    "ecdsa",
+    "merkle",
+    "pdf",
+    "digital-signature",
+    "transparency-log",
+    "proof",
+    "offline-verification",
+    "docusign-alternative"
+  ],
+  "author": "SignForge <hello@signforge.io>",
+  "license": "MIT",
+  "homepage": "https://signforge.io/verify",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kumarprobeops/signforge-verify-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kumarprobeops/signforge-verify-js/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "typescript": "^5.0.0"
+  }
+}
